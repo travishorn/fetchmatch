@@ -2,54 +2,37 @@
 
 import { program } from "commander";
 import {
-  getLocalFiles,
-  fetchRemoteUrl,
+  fetchRemoteUrls,
   getFilenameFromUrl,
-  downloadFile,
+  getLocalFiles,
+  downloadFiles,
 } from "./lib.js";
 
 program
-  .name("debtorrent")
-  .description("Downloads the latest Debian netinst torrent file")
+  .name("fetchmatch")
+  .description("Downloads files matching a regex from a remote URL")
   .version("0.1.0")
-  .option("-v, --verbose", "print verbose output")
-  .option(
-    "-d, --dir <directory>",
-    "directory to store torrent files",
-    process.cwd()
-  )
-  .option(
-    "-a, --arch <architecture>",
-    "CPU architecture (amd64, i386, arm64, etc)",
-    "amd64"
-  );
+  .requiredOption("-u, --url <url>", "remote URL from which to fetch files")
+  .requiredOption("-r, --regex <regex>", "regex to match files")
+  .option("-d, --dir <directory>", "directory to write files", process.cwd());
 
 program.parse();
 
-const options = program.opts();
+const { url, regex: regexStr, dir } = program.opts();
+const regex = new RegExp(regexStr);
 
-const TORRENT_REGEX = new RegExp(
-  `debian-\\d+\\.\\d+\\.\\d+-${options.arch}-netinst\\.iso\\.torrent`
+const remoteUrls = await fetchRemoteUrls(url, regex);
+
+const remoteFilenames = remoteUrls.map((url) => getFilenameFromUrl(url));
+
+const localFiles = await getLocalFiles(dir, regex);
+
+const newRemoteUrls = remoteUrls.filter(
+  (_, i) => !localFiles.includes(remoteFilenames[i]),
 );
-const TORRENTS_URL = `https://cdimage.debian.org/debian-cd/current/${options.arch}/bt-cd/`;
 
-const localTorrents = await getLocalFiles(options.dir, TORRENT_REGEX);
-if (options.verbose) {
-  console.log(`Found ${localTorrents.length} local torrent files`);
+if (newRemoteUrls.length === 0) {
+  process.exit(0);
 }
 
-const remoteTorrentUrl = await fetchRemoteUrl(TORRENTS_URL, TORRENT_REGEX);
-if (options.verbose) {
-  console.log(`Found remote torrent: ${remoteTorrentUrl}`);
-}
-
-const remoteTorrent = getFilenameFromUrl(remoteTorrentUrl);
-
-if (!localTorrents.includes(remoteTorrent)) {
-  await downloadFile(remoteTorrentUrl, options.dir);
-  if (options.verbose) {
-    console.log("Downloaded new torrent file");
-  }
-} else if (options.verbose) {
-  console.log("Latest torrent file already exists locally");
-}
+await downloadFiles(newRemoteUrls, dir);

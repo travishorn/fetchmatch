@@ -1,23 +1,43 @@
 {
-  "name": "debtorrent",
+  "name": "fetchmatch",
   "version": "0.1.0",
-  "exports": {
-    ".": "./src/index.js"
-  },
+  "description": "Downloads files matching a regex from a remote URL",
   "bin": {
-    "debian-torrent": "./src/index.js"
+    "fetchmatch": "./src/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
-  "keywords": [],
+  "keywords": [
+    "fetch",
+    "regex",
+    "download",
+    "files"
+  ],
   "author": "Travis Horn <travis@travishorn.com> (https://travishorn.com/)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/travishorn/fetchmatch.git"
+  },
+  "bugs": "https://github.com/travishorn/fetchmatch/issues",
+  "homepage": "https://github.com/travishorn/fetchmatch",
   "license": "MIT",
   "type": "module",
-  "description": "",
+  "files": [
+    "./src/**/*"
+  ],
   "dependencies": {
     "commander": "^13.1.0",
     "jsdom": "^26.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.0.1",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2"
   }
 }
