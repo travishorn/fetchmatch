@@ -1,0 +1,23 @@
+{
+  "name": "debtorrent",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "debian-torrent": "./src/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "Travis Horn <travis@travishorn.com> (https://travishorn.com/)",
+  "license": "MIT",
+  "type": "module",
+  "description": "",
+  "dependencies": {
+    "commander": "^13.1.0",
+    "jsdom": "^26.0.0"
+  }
+}
