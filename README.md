@@ -23,10 +23,10 @@ fetchmatch -u "yoururl" -r "yourregex"
 Example:
 
 ```sh
-fetchmatch -u "https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/" -r "debian-\d+\.\d+\.\d+-amd64-netinst\.iso\.torrent"
+fetchmatch -u "https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/" -r "debian-.*\.torrent"
 ```
 
-This will download the current Debian torrent file from debian.org.
+This will download the current Debian torrent files from debian.org.
 
 ## Arguments
 
