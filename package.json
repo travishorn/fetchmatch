@@ -1,6 +1,6 @@
 {
   "name": "fetchmatch",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Downloads files matching a regex from a remote URL",
   "bin": {
     "fetchmatch": "src/index.js"
